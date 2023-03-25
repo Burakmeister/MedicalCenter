@@ -1,0 +1,187 @@
+package views;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import dao.PatientDao;
+import dao.UserDao;
+import mapped.Patient;
+import mapped.User;
+
+public class PatientPanel extends JPanel{
+	
+	private JLabel nicknameText = new JLabel("*Login:"),
+			passwordText = new JLabel("*Hasło:"),
+			firstnameText = new JLabel("*Imię:"),
+			surnameText = new JLabel("*Nazwisko:"),
+			phoneNumberText = new JLabel("*Numer telefonu:"),
+			emailText = new JLabel("E-mail:"),
+			agreementStatus = new JLabel("Zgoda niedodana");
+	private JTextField nicknameField = new JTextField(10), 
+		firstnameField = new JTextField(10),
+		surnameField = new JTextField(10),
+		phoneNumberField = new JTextField(10),
+		emailField = new JTextField(10);
+	private JPasswordField passwordField = new JPasswordField(10);
+
+	private JButton saveButton = new JButton("Zapisz"),
+			returnButton = new JButton("Wyloguj"),
+			addAgreementButton = new JButton("Dodaj zgodę");
+	
+	private LoginPanel loginPanel;
+	
+	private Font font = new Font("TimesRoman", Font.BOLD, 50);
+	public PatientPanel(LoginPanel loginPanel) {
+		this.loginPanel = loginPanel;
+		initComposition();
+		init();
+	}
+	
+	private void init() {		
+		saveButton.setFont(font);
+		saveButton.setBackground(Color.black);
+		saveButton.setForeground(Color.WHITE);
+		saveButton.addActionListener((e)->{
+		});
+		
+		returnButton.setFont(font);
+		returnButton.setBackground(Color.black);
+		returnButton.setForeground(Color.WHITE);
+		returnButton.addActionListener((e)->{
+		});
+		
+		addAgreementButton.setFont(font);
+		addAgreementButton.setBackground(Color.black);
+		addAgreementButton.setForeground(Color.WHITE);
+		addAgreementButton.addActionListener((e)->{
+		});
+	}
+	
+	private void initComposition() {
+		this.setBackground(new Color(50, 50, 150));
+		setFocusable(true);
+		requestFocus(); 
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(layout);
+		
+		this.passwordField.setFont(font);
+		this.passwordText.setFont(font);
+		this.passwordText.setForeground(Color.black);
+		
+		this.nicknameField.setFont(font);
+		this.nicknameText.setFont(font);
+		this.nicknameText.setForeground(Color.black);
+		
+		this.firstnameField.setFont(font);
+		this.firstnameText.setFont(font);
+		this.firstnameText.setForeground(Color.black);
+		
+		this.surnameField.setFont(font);
+		this.surnameText.setFont(font);
+		this.surnameText.setForeground(Color.black);
+		
+		this.phoneNumberField.setFont(font);
+		this.phoneNumberText.setFont(font);
+		this.phoneNumberText.setForeground(Color.black);
+		
+		this.emailField.setFont(font);
+		this.emailText.setFont(font);
+		this.emailText.setForeground(Color.black);
+		
+		gbc.insets = new Insets(0,50,50,50);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		add(nicknameText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		add(this.nicknameField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		add(passwordText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		add(this.passwordField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		add(this.firstnameText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		add(this.firstnameField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		add(this.surnameText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		add(this.surnameField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		add(this.phoneNumberText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 4;
+		add(this.phoneNumberField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		add(this.emailText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 5;
+		add(this.emailField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		add(this.saveButton, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 6;
+		gbc.gridwidth = 2;
+		add(this.returnButton, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.gridwidth = 2;
+		add(this.addAgreementButton, gbc);
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		gbc.gridwidth = 2;
+		add(this.agreementStatus, gbc);
+		
+	}
+	
+	private void goToLoginPage() {
+		this.passwordField.setText("");
+		this.nicknameField.setText("");
+		this.firstnameField.setText("");
+		this.surnameField.setText("");
+		this.phoneNumberField.setText("");
+		this.emailField.setText("");
+		Main frame = (Main) SwingUtilities.getWindowAncestor(this);
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(loginPanel);
+		frame.revalidate();
+		frame.repaint();
+	}
+}

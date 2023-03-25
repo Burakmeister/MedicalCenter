@@ -1,0 +1,329 @@
+package views;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import dao.AgreementDao;
+import dao.PatientDao;
+import dao.ResearchDao;
+import dao.UserDao;
+import mapped.Agreement;
+import mapped.Patient;
+import mapped.Research;
+import mapped.User;
+
+public class PatientPanel extends JPanel{
+	
+	private JLabel nicknameText = new JLabel("*Login:"),
+			passwordText = new JLabel("*Hasło:"),
+			firstnameText = new JLabel("*Imię:"),
+			surnameText = new JLabel("*Nazwisko:"),
+			phoneNumberText = new JLabel("*Numer telefonu:"),
+			emailText = new JLabel("E-mail:"),
+			agreementStatus = new JLabel("Zgoda niedodana");
+	private JTextField nicknameField = new JTextField(10), 
+		firstnameField = new JTextField(10),
+		surnameField = new JTextField(10),
+		phoneNumberField = new JTextField(10),
+		emailField = new JTextField(10);
+	private JPasswordField passwordField = new JPasswordField(10);
+	private JComboBox<String> projects = new JComboBox<>();
+	private List<Agreement> agreements;
+
+	private JButton saveButton = new JButton("Zapisz"),
+			returnButton = new JButton("Wyloguj"),
+			addAgreementButton = new JButton("Dodaj zgodę");
+	
+	private LoginPanel loginPanel;
+	private User user;
+	
+	private Font font = new Font("TimesRoman", Font.BOLD, 50);
+	
+	public PatientPanel(LoginPanel loginPanel, User user) {
+		this.user = user;
+		this.loginPanel = loginPanel;
+		AgreementDao aDao = new AgreementDao();
+		this.agreements = aDao.getAll();
+		ResearchDao rDao = new ResearchDao();
+		List<Research> researches = rDao.getAll();
+		for(Research res : researches) {
+			projects.addItem(res.getTitle());
+		}
+		if(user.getPatient()==null) {
+			disablePatientData();
+		}
+		checkAgreementStatus();
+		initComposition();
+		init();
+	}
+	
+	private void init() {		
+		saveButton.setFont(font);
+		saveButton.setBackground(Color.black);
+		saveButton.setForeground(Color.WHITE);
+		saveButton.addActionListener((e)->{
+			UserDao uDao = new UserDao();
+			if(!"".equals(nicknameField.getText()) && !"".equals(new String(this.passwordField.getPassword()))) {
+				List<User> users = uDao.getAll();
+				User temp = new User();
+				temp.setLogin(nicknameField.getText());
+				if(users.contains(temp)) {
+					JOptionPane.showMessageDialog(null, "Ten login jest zajęty", "", JOptionPane.WARNING_MESSAGE);
+				}
+				else {
+					if(user.getPatient()==null) {
+						uDao.update( new User(this.nicknameField.getText(), new String(this.passwordField.getPassword()), (byte)0) );
+						JOptionPane.showMessageDialog(null, "Zmiany zapisane", "", JOptionPane.INFORMATION_MESSAGE);
+					}else {
+						if(!"".equals(this.firstnameField.getText()) && !"".equals(this.surnameField.getText())
+								&& !"".equals(this.phoneNumberField.getText())) {
+							int num = 0;
+							try {
+								num = Integer.parseInt(this.phoneNumberField.getText());
+								if(num<1000000000 && num>99999999) {
+									Patient patient = user.getPatient();
+									patient.setEmail(emailField.getText());
+									patient.setFirstname(firstnameField.getText());
+									patient.setLastname(surnameField.getText());
+									patient.setPhoneNumber(num);
+									PatientDao pDao = new PatientDao();
+									pDao.update(patient);
+									uDao.update(user);
+									JOptionPane.showMessageDialog(null, "Zmiany zapisane", "", JOptionPane.INFORMATION_MESSAGE);
+								}else {
+									JOptionPane.showMessageDialog(null, "Numer telefonu mu być 9 cyfrową liczbą", "", JOptionPane.WARNING_MESSAGE);
+								}
+							}catch(NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null, "Numer telefonu mu być 9 cyfrową liczbą", "", JOptionPane.WARNING_MESSAGE);
+							}
+						}else {
+							JOptionPane.showMessageDialog(null, "W celu edycji konta pacjenta uzupełnij wymagane pola oznaczone gwiazdką", "", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				}
+			}else {
+				JOptionPane.showMessageDialog(null, "W celu edycji konta wprowadz nazwę użytkownika i hasło", "", JOptionPane.WARNING_MESSAGE);
+			}
+				this.passwordField.setText("");
+				this.nicknameField.setText("");
+				this.firstnameField.setText("");
+				this.surnameField.setText("");
+				this.phoneNumberField.setText("");
+				this.emailField.setText("");
+			});
+		
+		returnButton.setFont(font);
+		returnButton.setBackground(Color.black);
+		returnButton.setForeground(Color.WHITE);
+		returnButton.addActionListener((e)->{
+			if(user.getAccessLevel()==0) {
+				goToLoginPage();
+			}else {
+				
+			}
+		});
+		
+		addAgreementButton.setFont(font);
+		addAgreementButton.setBackground(Color.black);
+		addAgreementButton.setForeground(Color.WHITE);
+		addAgreementButton.addActionListener((e)->{
+			Agreement agree = new Agreement(user.getPatient());
+			ResearchDao rDao = new ResearchDao();
+			Research research = rDao.getResearchByTitle((String) projects.getSelectedItem());
+			agree.setResearch(research);
+			AgreementDao aDao = new AgreementDao();
+			aDao.create(agree);
+			agreementStatus.setText("Zgoda dodana");
+			agreementStatus.setForeground(Color.green);
+			agreements.add(agree);
+		});
+		
+		this.projects.addActionListener((l)->{
+			checkAgreementStatus();
+		});
+	}
+	
+	private void initComposition() {
+		this.setBackground(new Color(50, 50, 150));
+		setFocusable(true);
+		requestFocus(); 
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(layout);
+		
+		this.passwordField.setFont(font);
+		this.passwordField.setText(user.getPassword());
+		this.passwordText.setFont(font);
+		this.passwordText.setForeground(Color.black);
+		
+		this.nicknameField.setFont(font);
+		this.nicknameField.setText(user.getLogin());
+		this.nicknameText.setFont(font);
+		this.nicknameText.setForeground(Color.black);
+		
+		if(user.getPatient()!=null) {
+			this.firstnameField.setText(user.getPatient().getFirstname());
+			this.surnameField.setText(user.getPatient().getLastname());
+			this.phoneNumberField.setText(user.getPatient().getPhoneNumber()+"");
+			this.emailField.setText(user.getPatient().getEmail());
+		}else {
+			this.firstnameField.setText("");
+			this.surnameField.setText("");
+			this.phoneNumberField.setText("");
+			this.emailField.setText("");
+		}
+		this.firstnameField.setFont(font);
+		this.firstnameText.setFont(font);
+		this.firstnameText.setForeground(Color.black);
+		
+		this.surnameField.setFont(font);
+		this.surnameText.setFont(font);
+		this.surnameText.setForeground(Color.black);
+		
+		this.phoneNumberField.setFont(font);
+		this.phoneNumberText.setFont(font);
+		this.phoneNumberText.setForeground(Color.black);
+		
+		this.emailField.setFont(font);
+		this.emailText.setFont(font);
+		this.emailText.setForeground(Color.black);
+		
+		this.agreementStatus.setFont(font);
+		
+		this.projects.setFont(font);
+		
+		gbc.insets = new Insets(0,50,50,50);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		add(nicknameText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		add(this.nicknameField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		add(passwordText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		add(this.passwordField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		add(this.firstnameText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		add(this.firstnameField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		add(this.surnameText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		add(this.surnameField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		add(this.phoneNumberText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 4;
+		add(this.phoneNumberField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		add(this.emailText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 5;
+		add(this.emailField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		add(this.saveButton, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 6;
+		gbc.gridwidth = 2;
+		add(this.returnButton, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.gridwidth = 2;
+		add(this.projects, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		gbc.gridwidth = 2;
+		add(this.addAgreementButton, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 2;
+		gbc.gridwidth = 2;
+		add(this.agreementStatus, gbc);
+		
+	}
+	
+	private void goToLoginPage() {
+		Main frame = (Main) SwingUtilities.getWindowAncestor(this);
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(loginPanel);
+		frame.revalidate();
+		frame.repaint();
+	}
+	private void checkAgreementStatus() {
+		agreementStatus.setText("Zgoda niedodana");
+		agreementStatus.setForeground(Color.red);
+		for(Agreement agree : agreements) {
+			if(agree.getResearch().getTitle().equals(projects.getSelectedItem())) {
+				agreementStatus.setText("Zgoda dodana");
+				agreementStatus.setForeground(Color.green);
+			}
+		}
+	}
+	private void disablePatientData() {
+		this.firstnameField.setFont(font);
+		this.firstnameField.setEditable(false);
+		this.firstnameField.setBackground(Color.gray);
+		
+		this.surnameField.setFont(font);
+		this.surnameField.setEditable(false);
+		this.surnameField.setBackground(Color.gray);
+		
+		this.phoneNumberField.setFont(font);
+		this.phoneNumberField.setEditable(false);
+		this.phoneNumberField.setBackground(Color.gray);
+		
+		this.emailField.setFont(font);
+		this.emailField.setEditable(false);
+		this.emailField.setBackground(Color.gray);
+		
+		this.firstnameText.setFont(font);
+		this.firstnameText.setForeground(Color.black);
+		this.surnameText.setFont(font);
+		
+		this.surnameText.setForeground(Color.black);
+		this.phoneNumberText.setFont(font);
+		this.phoneNumberText.setForeground(Color.black);
+		
+		this.emailText.setFont(font);
+		this.emailText.setForeground(Color.black);
+	}
+}

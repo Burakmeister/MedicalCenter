@@ -12,21 +12,6 @@ public class UserDao extends Dao<User>{
 		this.setmodelClass(User.class);
 	}
 	
-	public List<User> getAllUsers(){
-        Session session = this.getSession();
-        session.beginTransaction();
-        List<User> list = session.createQuery(
-        		"SELECT user"
-        		+ "FROM mapped.User user")
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
-        if (list != null) {
-            return list;
-        }
-        return null;
-	}
-	
     public User getUser(String login, String password) {
         System.out.println(password + "  " + login);
         Session session = this.getSession();

@@ -1,0 +1,21 @@
+package views;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class PatientPanel extends JPanel{
+	private JLabel nicknameText = new JLabel("Login:"),
+			passwordText = new JLabel("Hasło:"),
+			firstnameText = new JLabel("*Imię:"),
+			surnameText = new JLabel("*Nazwisko:"),
+			phoneNumberText = new JLabel("*Numer telefonu:"),
+			emailText = new JLabel("E-mail:");
+	private JTextField nicknameField = new JTextField(10), 
+		firstnameField = new JTextField(10),
+		surnameField = new JTextField(10),
+		phoneNumberField = new JTextField(10),
+		emailField = new JTextField(10);
+	private JButton saveButton = new JButton("Zapisz");
+	
+}

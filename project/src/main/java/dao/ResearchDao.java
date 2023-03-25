@@ -6,24 +6,28 @@ import org.hibernate.Session;
 
 import mapped.Referral;
 import mapped.Research;
+import mapped.User;
 
 public class ResearchDao extends Dao<Research>{
 	public ResearchDao() {
 		this.setmodelClass(Research.class);
 	}
 	
-	public List<Research> getAllResearches(){
+	public Research getResearchByTitle(String title) {
         Session session = this.getSession();
         session.beginTransaction();
-        List<Research> list = session.createQuery(
-        		"SELECT research"
-        		+ "FROM mapped.Research research")
-                .getResultList();
+        Research research = null;
+        research = (Research) session.createQuery(
+                " select res "
+                + "from mapped.Research res "
+                + "where res.title = :title")
+                .setParameter("title", title)
+                .uniqueResult();
         session.getTransaction().commit();
         session.close();
-        if (list != null) {
-            return list;
+        if (research != null) {
+            return research;
         }
         return null;
-	}
+    }
 }

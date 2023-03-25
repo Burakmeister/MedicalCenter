@@ -91,14 +91,17 @@ public class LoginPanel extends JPanel{
 			User user = uDao.getUser(nicknameField.getText(), new String(passwordField.getPassword()));
 			if(user!=null) {
 				Main frame = (Main) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
+				frame.getContentPane().removeAll();
 				switch(user.getAccessLevel()) {
 				case 0:
+					frame.getContentPane().add(new PatientPanel(this, user));
 					break;
-				case 1:
-					break;
-				case 2:
+				default:
+					frame.getContentPane().add(new AdministratorPanel());
 					break;
 				}
+				frame.revalidate();
+				frame.repaint();
 			}else {
 				JOptionPane.showMessageDialog(null, "Nieprawidłowe dane", "", JOptionPane.WARNING_MESSAGE);
 			}
