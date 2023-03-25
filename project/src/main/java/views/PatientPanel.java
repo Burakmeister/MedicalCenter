@@ -44,17 +44,17 @@ public class PatientPanel extends JPanel{
 	private List<Agreement> agreements;
 
 	private JButton saveButton = new JButton("Zapisz"),
-			returnButton = new JButton("Wyloguj"),
+			returnButton = new JButton("Wyjście"),
 			addAgreementButton = new JButton("Dodaj zgodę");
 	
-	private LoginPanel loginPanel;
+	private JPanel panel;
 	private User user;
 	
 	private Font font = new Font("TimesRoman", Font.BOLD, 50);
 	
-	public PatientPanel(LoginPanel loginPanel, User user) {
+	public PatientPanel(JPanel panel, User user) {
 		this.user = user;
-		this.loginPanel = loginPanel;
+		this.panel = panel;
 		AgreementDao aDao = new AgreementDao();
 		this.agreements = aDao.getAll();
 		ResearchDao rDao = new ResearchDao();
@@ -279,10 +279,11 @@ public class PatientPanel extends JPanel{
 	private void goToLoginPage() {
 		Main frame = (Main) SwingUtilities.getWindowAncestor(this);
 		frame.getContentPane().removeAll();
-		frame.getContentPane().add(loginPanel);
+		frame.getContentPane().add(panel);
 		frame.revalidate();
 		frame.repaint();
 	}
+	
 	private void checkAgreementStatus() {
 		agreementStatus.setText("Zgoda niedodana");
 		agreementStatus.setForeground(Color.red);
@@ -293,6 +294,7 @@ public class PatientPanel extends JPanel{
 			}
 		}
 	}
+	
 	private void disablePatientData() {
 		this.firstnameField.setFont(font);
 		this.firstnameField.setEditable(false);

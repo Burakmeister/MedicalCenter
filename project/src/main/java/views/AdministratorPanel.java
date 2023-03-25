@@ -10,14 +10,19 @@ import java.awt.Toolkit;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import dao.PatientDao;
 import dao.ResearchDao;
+import dao.UserDao;
 import mapped.Patient;
 import mapped.Research;
 import mapped.User;
@@ -35,10 +40,12 @@ public class AdministratorPanel extends JPanel{
 	
 	private JButton patientDetailsButton = new JButton("Szczegóły pacjenta"),
 			saveButton = new JButton("Zapisz opis"),
+			removeButton = new JButton("Usuń projekt"),
 			returnButton = new JButton("Wyloguj"),
-			referralButton = new JButton("Wystaw skierowanie");
+			referralButton = new JButton("Wystaw skierowanie"),
+			createProject = new JButton("Utwórz projekt");
 	
-	private Font font = new Font("TimesRoman", Font.BOLD, 50);
+	private Font font = new Font("TimesRoman", Font.BOLD, 30);
 	private Font descFont = new Font("TimesRoman", Font.BOLD, 25);
 
 	
@@ -57,8 +64,74 @@ public class AdministratorPanel extends JPanel{
 		requestFocus(); 
 		init();
 		initComposition();
+		initListeners();
 	}
 	
+	private void initListeners() {
+		this.returnButton.addActionListener((e)->{
+			goToLoginPage();
+		});
+		
+		this.saveButton.addActionListener((e)->{
+			if(this.researchesJList.getSelectedIndex()!=-1) {
+				ResearchDao rDao = new ResearchDao();
+				Research edit = researches.get(this.researchesJList.getSelectedIndex());
+				edit.setDescription(this.descriptionArea.getText());
+				rDao.update(edit);
+			}else {
+				JOptionPane.showMessageDialog(null, "Wybierz projekt który chcesz zedytować", null, JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		
+		this.removeButton.addActionListener((e)->{
+			if(this.researchesJList.getSelectedIndex()!=-1) {
+				ResearchDao rDao = new ResearchDao();
+				Research delete = researches.get(this.researchesJList.getSelectedIndex());
+				int input = JOptionPane.showConfirmDialog(null, 
+						"Czy na pewno chcesz usunąć projekt?", null, 
+							JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null);
+				switch(input) {
+				case 0:{
+					rDao.delete(delete);
+					this.researches.removeAllElements();
+					for(Research res : rDao.getAll()) {
+						this.researches.addElement(res);
+					}
+				}
+				case 2:{
+					break;
+					}
+				}
+			}else {
+				JOptionPane.showMessageDialog(null, "Wybierz projekt który chcesz usunąć", "", JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		
+		this.patientDetailsButton.addActionListener((e)->{
+			if(this.patientsJList.getSelectedIndex()!=-1) {
+				Main frame = (Main) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
+				frame.getContentPane().removeAll();
+				UserDao uDao = new UserDao();
+				User user = uDao.getUserPatient(
+						this.patients.get(this.patientsJList.getSelectedIndex())
+						);
+				frame.getContentPane().add(new PatientPanel(this, user));
+				frame.revalidate();
+				frame.repaint();
+			}else {
+				JOptionPane.showMessageDialog(null, "Wybierz pacjenta", "", JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		
+		this.createProject.addActionListener((e)->{
+			Main frame = (Main) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(new ResearchCreatePanel(this));
+			frame.revalidate();
+			frame.repaint();
+		});
+	}
+
 	private void initComposition() {
 		this.researchesJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.researchesJList.setFont(font);
@@ -84,6 +157,30 @@ public class AdministratorPanel extends JPanel{
 		this.descriptionArea.setFont(descFont);
 		this.descriptionArea.setLineWrap(true);
 		this.descriptionArea.setWrapStyleWord(true);
+		
+		this.saveButton.setBackground(Color.black);
+		this.saveButton.setForeground(Color.white);
+		this.saveButton.setFont(font);
+		
+		this.removeButton.setBackground(Color.red);
+		this.removeButton.setForeground(Color.white);
+		this.removeButton.setFont(font);
+		
+		this.createProject.setBackground(Color.black);
+		this.createProject.setForeground(Color.white);
+		this.createProject.setFont(font);
+
+		this.returnButton.setBackground(Color.black);
+		this.returnButton.setForeground(Color.white);
+		this.returnButton.setFont(font);
+		
+		this.patientDetailsButton.setBackground(Color.black);
+		this.patientDetailsButton.setForeground(Color.white);
+		this.patientDetailsButton.setFont(font);
+
+		this.referralButton.setBackground(Color.black);
+		this.referralButton.setForeground(Color.white);
+		this.referralButton.setFont(font);
 	}
 
 	private void init() {
@@ -106,17 +203,56 @@ public class AdministratorPanel extends JPanel{
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.gridwidth = 2;
+		gbc.gridwidth = 3;
 		add(scrollPanel, gbc);
+		
+		
+		gbc.gridx = 3;
+		gbc.gridy = 0;
+		gbc.gridwidth = 3;
+		add(scrollPane11, gbc);
+		
 		
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		gbc.gridwidth = 2;
+		gbc.gridwidth = 3;
+		gbc.gridheight = 2;
+
 		add(this.descriptionArea, gbc);
 		
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		gbc.gridwidth = 2;
-		add(scrollPane11, gbc);
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		add(this.saveButton, gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 2;
+		add(this.removeButton, gbc);
+		
+		gbc.gridx = 4;
+		gbc.gridy = 1;
+		add(this.createProject, gbc);
+		
+		gbc.gridx = 4;
+		gbc.gridy = 2;
+		add(this.returnButton, gbc);
+		
+		gbc.gridx = 5;
+		gbc.gridy = 1;
+		add(this.patientDetailsButton, gbc);
+		
+		gbc.gridx = 5;
+		gbc.gridy = 2;
+		add(this.referralButton, gbc);
+	}
+	
+	private void goToLoginPage() {
+		Main frame = (Main) SwingUtilities.getWindowAncestor(this);
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(loginPanel);
+		frame.revalidate();
+		frame.repaint();
 	}
 }

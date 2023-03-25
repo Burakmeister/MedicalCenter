@@ -1,0 +1,30 @@
+package views;
+
+import java.awt.Color;
+
+import javax.swing.JList;
+import javax.swing.JPanel;
+
+import dao.ResearchDao;
+import mapped.Research;
+
+public class ResearchCreatePanel extends JPanel{
+	
+	private JPanel prevPanel;
+
+	public ResearchCreatePanel(JPanel panel) {
+		this.prevPanel = panel;
+		this.setBackground(new Color(50, 50, 150));
+		setFocusable(true);
+		requestFocus(); 
+		init();
+		initComposition();
+		initListeners();
+	}
+
+	private void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
