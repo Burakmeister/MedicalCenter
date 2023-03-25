@@ -15,3 +15,6 @@ INSERT INTO mydb.research (Title, Description)
 VALUES ('Jedzenie lodów, a zapalenie gardła', 'Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. 
 Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. 
 Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym.');
+
+INSERT INTO mydb.research (Title, Description)
+VALUES ('Nie dziala gowno', 'Lorem Ipsum jest znie niezmienionym.')

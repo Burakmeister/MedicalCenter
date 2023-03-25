@@ -1,0 +1,29 @@
+package views;
+
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JPanel;
+
+import mapped.User;
+
+public class AdministratorPanel extends JPanel{
+	private User user;
+	private LoginPanel loginPanel;
+	
+	public AdministratorPanel(LoginPanel loginPanel, User user) {
+		this.user = user;
+		this.loginPanel = loginPanel;
+		this.setBackground(new Color(50, 50, 150));
+		setFocusable(true);
+		requestFocus(); 
+		init();
+	}
+	
+	private void init() {
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(layout);
+	}
+}

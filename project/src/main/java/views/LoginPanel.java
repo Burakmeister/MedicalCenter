@@ -97,7 +97,7 @@ public class LoginPanel extends JPanel{
 					frame.getContentPane().add(new PatientPanel(this, user));
 					break;
 				default:
-					frame.getContentPane().add(new AdministratorPanel());
+					frame.getContentPane().add(new AdministratorPanel(this, user));
 					break;
 				}
 				frame.revalidate();

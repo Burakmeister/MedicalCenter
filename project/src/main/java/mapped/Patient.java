@@ -78,4 +78,10 @@ public class Patient {
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
+
+	@Override
+	public String toString() {
+		return firstname + " " + lastname;
+	}
+	
 }

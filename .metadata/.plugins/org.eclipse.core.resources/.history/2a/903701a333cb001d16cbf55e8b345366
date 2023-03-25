@@ -1,0 +1,105 @@
+package views;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+
+import dao.PatientDao;
+import dao.ResearchDao;
+import mapped.Patient;
+import mapped.Research;
+import mapped.User;
+
+public class AdministratorPanel extends JPanel{
+	private User user;
+	private LoginPanel loginPanel;
+	
+	private JList<String> researchesJList;
+	private JList<String> patientsJList;
+	private List<Patient> patients;
+	private List<Research> researches;
+	
+	private JTextArea descriptionArea = new JTextArea();
+	
+	private Font font = new Font("TimesRoman", Font.BOLD, 50);
+	
+	public AdministratorPanel(LoginPanel loginPanel, User user) {
+		ResearchDao rDao = new ResearchDao();
+		List<String> list = new ArrayList<String>();
+		for(Research res : rDao.getAll()) {
+			list.add(res.toString());
+			this.researches.add(res);
+		}
+	    this.researchesJList = new JList<String>(list.toArray(new String[list.size()]));
+	    
+	    PatientDao pDao = new PatientDao();
+	    List<String>list2 = new ArrayList<String>();
+	    for(Patient patient : pDao.getPatientsByResearchTitle(list.get(0))) {
+	    	list2.add(patient.getFirstname() + " " + patient.getLastname());
+	    	this.patients.add(patient);
+	    }
+	    this.patientsJList = new JList<String>(list2.toArray(new String[list2.size()]));
+	    	    
+		this.user = user;
+		this.loginPanel = loginPanel;
+		this.setBackground(new Color(50, 50, 150));
+		setFocusable(true);
+		requestFocus(); 
+		init();
+		initComposition();
+	}
+	
+	private void initComposition() {
+		this.researchesJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.researchesJList.setFont(font);
+		this.researchesJList.setBackground(Color.BLACK);
+		this.researchesJList.setForeground(Color.white);
+		
+		this.patientsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.patientsJList.setFont(font);
+		this.patientsJList.setBackground(Color.BLACK);
+		this.patientsJList.setForeground(Color.white);
+		
+		this.descriptionArea.setBackground(Color.white);
+		this.descriptionArea.setForeground(Color.black);
+		this.descriptionArea.setFont(font);
+//		this.descriptionArea.setText(this.researches);
+	}
+
+	private void init() {
+		JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(this.researchesJList);
+	    this.researchesJList.setLayoutOrientation(JList.VERTICAL);
+	    
+		JScrollPane scrollPane1 = new JScrollPane();
+	    scrollPane.setViewportView(this.patientsJList);
+	    this.patientsJList.setLayoutOrientation(JList.VERTICAL);
+	      
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(layout);
+		gbc.insets = new Insets(50,50,50,50);
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		add(scrollPane, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		add(this.descriptionArea, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		add(scrollPane1, gbc);
+	}
+}

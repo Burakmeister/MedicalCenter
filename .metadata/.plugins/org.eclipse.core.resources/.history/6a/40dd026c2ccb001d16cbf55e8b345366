@@ -1,0 +1,15 @@
+package views;
+
+import javax.swing.JPanel;
+
+import mapped.User;
+
+public class AdministratorPanel extends JPanel{
+	private User user;
+	private LoginPanel loginPanel;
+	
+	public AdministratorPanel(LoginPanel loginPanel, User user) {
+		this.user = user;
+		this.loginPanel = loginPanel;
+	}
+}

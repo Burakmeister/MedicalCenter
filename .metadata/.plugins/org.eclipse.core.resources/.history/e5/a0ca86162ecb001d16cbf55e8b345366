@@ -1,0 +1,43 @@
+package views;
+
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JList;
+import javax.swing.JPanel;
+
+import dao.ResearchDao;
+import mapped.Research;
+import mapped.User;
+
+public class AdministratorPanel extends JPanel{
+	private User user;
+	private LoginPanel loginPanel;
+	
+	private JList<String> researches;
+	
+	public AdministratorPanel(LoginPanel loginPanel, User user) {
+		ResearchDao rDao = new ResearchDao();
+		List<String> list = new ArrayList<String>();
+		for(Research res : rDao.getAll()) {
+			list.add(res.toString());
+		}
+	     this.researches = new JList<String>(list.toArray(new String[list.size()]));
+
+		this.user = user;
+		this.loginPanel = loginPanel;
+		this.setBackground(new Color(50, 50, 150));
+		setFocusable(true);
+		requestFocus(); 
+		init();
+	}
+	
+	private void init() {
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(layout);
+	}
+}
