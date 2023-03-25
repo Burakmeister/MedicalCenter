@@ -1,8 +1,7 @@
 # MedicalCenter
 Aby uruchomić aplikację na urządzeniu z systemem Linux, należy:
 - postawić serwer MySQL, przy pomocy skryptu znajdującego się w pliku script.sql
-- w archiwum jar o nazwie "start.jar" znajduje się plik "hibernate.cfg.xml", należy zmienić w nim "connection.username" oraz "connection.password" na takie, które zostały wybrane przy tworzeniu serwera, w polu o nazwie "connection.url" należy wprowadzić adres serwera
-uruchomić plik start.jar
+- w archiwum jar o nazwie "start.jar" znajduje się plik "hibernate.cfg.xml", należy zmienić w nim "connection.username" oraz "connection.password" na takie, które zostały wybrane przy tworzeniu serwera, w polu o nazwie "connection.url" należy wprowadzić adres serwera 
 - uruchomić plik "start.jar"
 
 Zaimplementowane funkcjonalności:
