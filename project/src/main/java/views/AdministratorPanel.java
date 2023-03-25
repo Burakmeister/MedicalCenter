@@ -7,9 +7,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.util.List;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -20,9 +23,11 @@ import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import dao.AgreementDao;
 import dao.PatientDao;
 import dao.ResearchDao;
 import dao.UserDao;
+import mapped.Agreement;
 import mapped.Patient;
 import mapped.Research;
 import mapped.User;
@@ -42,7 +47,7 @@ public class AdministratorPanel extends JPanel{
 			saveButton = new JButton("Zapisz opis"),
 			removeButton = new JButton("Usuń projekt"),
 			returnButton = new JButton("Wyloguj"),
-			referralButton = new JButton("Wystaw skierowanie"),
+			showPatients = new JButton("Pokaż pacjentów"),
 			createProject = new JButton("Utwórz projekt");
 	
 	private Font font = new Font("TimesRoman", Font.BOLD, 30);
@@ -89,7 +94,13 @@ public class AdministratorPanel extends JPanel{
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null);
 				switch(input) {
 				case 0:{
+					AgreementDao aDao = new AgreementDao();
+					List<Agreement> list = aDao.getResearchsAgreements(delete);
+					for(Agreement ag: list) {
+						aDao.delete(ag);
+					}
 					rDao.delete(delete);
+					JOptionPane.showMessageDialog(null, "Projekt został usunięty", "", JOptionPane.WARNING_MESSAGE);
 					this.setProjectsList();
 				}
 				case 2:{
@@ -124,6 +135,24 @@ public class AdministratorPanel extends JPanel{
 			frame.revalidate();
 			frame.repaint();
 		});
+		
+		this.showPatients.addActionListener((e)->{
+			PatientDao pDao = new PatientDao();
+			List<Patient> patients = pDao.getAll();
+			
+		    JComboBox comboBox = new JComboBox(patients.toArray()); 
+		    int input = JOptionPane.showConfirmDialog(this, comboBox, "Wybierz pacjenta", JOptionPane.DEFAULT_OPTION);
+		    if(input == JOptionPane.OK_OPTION) {
+				Main frame = (Main) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
+				frame.getContentPane().removeAll();
+				Patient patient = (Patient) comboBox.getSelectedItem();
+				UserDao uDao = new UserDao();
+				User user = uDao.getUserPatient(patient);
+				frame.getContentPane().add(new PatientPanel(this, user));
+				frame.revalidate();
+				frame.repaint();
+		    }
+		});
 	}
 
 	private void initComposition() {
@@ -132,13 +161,15 @@ public class AdministratorPanel extends JPanel{
 		this.researchesJList.setBackground(Color.BLACK);
 		this.researchesJList.setForeground(Color.white);
 		this.researchesJList.addListSelectionListener((e)->{
-			this.descriptionArea.setText(this.researches.get(this.researchesJList.getSelectedIndex()).getDescription());
-			this.patients.removeAllElements();
-			PatientDao dao = new PatientDao();
-			this.patients.addAll(
-					dao.getPatientsByResearchTitle(
-							this.researches.get(this.researchesJList.getSelectedIndex()).toString()
-							));
+			if(this.researchesJList.getSelectedIndex()!=-1) {
+				this.descriptionArea.setText(this.researches.get(this.researchesJList.getSelectedIndex()).getDescription());
+				this.patients.removeAllElements();
+				PatientDao dao = new PatientDao();
+				this.patients.addAll(
+						dao.getPatientsByResearchTitle(
+								this.researches.get(this.researchesJList.getSelectedIndex()).toString()
+								));
+			}
 		});
 		
 		this.patientsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -172,9 +203,9 @@ public class AdministratorPanel extends JPanel{
 		this.patientDetailsButton.setForeground(Color.white);
 		this.patientDetailsButton.setFont(font);
 
-		this.referralButton.setBackground(Color.black);
-		this.referralButton.setForeground(Color.white);
-		this.referralButton.setFont(font);
+		this.showPatients.setBackground(Color.black);
+		this.showPatients.setForeground(Color.white);
+		this.showPatients.setFont(font);
 	}
 
 	private void init() {
@@ -239,7 +270,7 @@ public class AdministratorPanel extends JPanel{
 		
 		gbc.gridx = 5;
 		gbc.gridy = 2;
-		add(this.referralButton, gbc);
+		add(this.showPatients, gbc);
 	}
 	
 	private void goToLoginPage() {
@@ -256,5 +287,6 @@ public class AdministratorPanel extends JPanel{
 		for(Research res : rDao.getAll()) {
 			this.researches.addElement(res);
 		}		
+		this.researchesJList.setSelectedIndex(0);
 	}
 }

@@ -45,18 +45,18 @@ public class PatientPanel extends JPanel{
 
 	private JButton saveButton = new JButton("Zapisz"),
 			returnButton = new JButton("Wyjście"),
-			addAgreementButton = new JButton("Dodaj zgodę");
-	
+			addAgreementButton = new JButton("Dodaj zgodę"),
+			removeAgreementButton = new JButton("Usuń zgodę");
 	private JPanel panel;
 	private User user;
-	
 	private Font font = new Font("TimesRoman", Font.BOLD, 50);
 	
 	public PatientPanel(JPanel panel, User user) {
 		this.user = user;
 		this.panel = panel;
 		AgreementDao aDao = new AgreementDao();
-		this.agreements = aDao.getAll();
+		this.agreements = aDao.getPatientsAgreement(user.getPatient());
+		
 		ResearchDao rDao = new ResearchDao();
 		List<Research> researches = rDao.getAll();
 		for(Research res : researches) {
@@ -124,26 +124,49 @@ public class PatientPanel extends JPanel{
 		returnButton.setBackground(Color.black);
 		returnButton.setForeground(Color.WHITE);
 		returnButton.addActionListener((e)->{
-			if(user.getAccessLevel()==0) {
 				goToLoginPage();
-			}else {
-				
-			}
 		});
 		
 		addAgreementButton.setFont(font);
 		addAgreementButton.setBackground(Color.black);
 		addAgreementButton.setForeground(Color.WHITE);
 		addAgreementButton.addActionListener((e)->{
-			Agreement agree = new Agreement(user.getPatient());
-			ResearchDao rDao = new ResearchDao();
-			Research research = rDao.getResearchByTitle((String) projects.getSelectedItem());
-			agree.setResearch(research);
-			AgreementDao aDao = new AgreementDao();
-			aDao.create(agree);
-			agreementStatus.setText("Zgoda dodana");
-			agreementStatus.setForeground(Color.green);
-			agreements.add(agree);
+			if(user.getPatient()!=null) {
+				Agreement agree = new Agreement(user.getPatient());
+				ResearchDao rDao = new ResearchDao();
+				Research research = rDao.getResearchByTitle((String) projects.getSelectedItem());
+				agree.setResearch(research);
+				AgreementDao aDao = new AgreementDao();
+				aDao.create(agree);
+				agreementStatus.setText("Zgoda dodana");
+				agreementStatus.setForeground(Color.green);
+				agreements.add(agree);
+			}else {
+				JOptionPane.showMessageDialog(null, "W celu dodania zgody, należy wprowadzić dane pacjenta", "", JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		
+		removeAgreementButton.setFont(font);
+		removeAgreementButton.setBackground(Color.red);
+		removeAgreementButton.setForeground(Color.WHITE);
+		removeAgreementButton.addActionListener((e)->{
+			if(user.getPatient()!=null) {
+				AgreementDao aDao = new AgreementDao();
+				Agreement agreeCur = null;
+				for(Agreement agree : agreements) {
+					if(agree.getResearch().getTitle().equals(projects.getSelectedItem())) {
+						agreeCur = agree;
+						break;
+					}
+				}
+				if(agreeCur!=null) {
+					aDao.delete(agreeCur);
+					this.agreements = aDao.getAll();
+					this.checkAgreementStatus();
+				}else {
+					JOptionPane.showMessageDialog(null, "Zgoda nie jest podpisana", "", JOptionPane.WARNING_MESSAGE);
+				}
+			}
 		});
 		
 		this.projects.addActionListener((l)->{
@@ -266,14 +289,17 @@ public class PatientPanel extends JPanel{
 		
 		gbc.gridx = 2;
 		gbc.gridy = 1;
-		gbc.gridwidth = 2;
+		gbc.gridwidth = 1;
 		add(this.addAgreementButton, gbc);
 		
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		add(this.removeAgreementButton, gbc);
+		
 		gbc.gridx = 2;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.gridwidth = 2;
 		add(this.agreementStatus, gbc);
-		
 	}
 	
 	private void goToLoginPage() {

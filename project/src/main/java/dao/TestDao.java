@@ -13,19 +13,4 @@ public class TestDao extends Dao<Test>{
 	public TestDao() {
 		this.setmodelClass(Test.class);
 	}
-	
-	public List<Test> getAllTests(){
-        Session session = this.getSession();
-        session.beginTransaction();
-        List<Test> list = session.createQuery(
-        		"SELECT test"
-        		+ "FROM mapped.Test test")
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
-        if (list != null) {
-            return list;
-        }
-        return null;
-	}
 }

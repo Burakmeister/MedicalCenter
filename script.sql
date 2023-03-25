@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`User` (
   `Login` VARCHAR(45) NOT NULL,
   `Password` VARCHAR(45) NOT NULL,
   `Access_level` TINYINT NOT NULL,
-  `Patient_idPatient` INT NOT NULL,
+  `Patient_idPatient` INT NULL,
   PRIMARY KEY (`idUser`),
   INDEX `fk_User_Patient1_idx` (`Patient_idPatient` ASC) VISIBLE,
   UNIQUE INDEX `idUser_UNIQUE` (`idUser` ASC) VISIBLE,
@@ -93,19 +93,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Agreement` (
   `idAgreement` INT NOT NULL AUTO_INCREMENT,
   `Patient_idPatient` INT NOT NULL,
   `Agreement` VARCHAR(45) NULL,
-  `Research_idResearch` INT NULL,
+  `Research_idResearch` INT NOT NULL,
   PRIMARY KEY (`idAgreement`),
   INDEX `fk_Agreement_Patient1_idx` (`Patient_idPatient` ASC) VISIBLE,
-  INDEX `fk_Agreement_Research1_idx` (`Research_idResearch` ASC) VISIBLE,
   UNIQUE INDEX `idAgreement_UNIQUE` (`idAgreement` ASC) VISIBLE,
   CONSTRAINT `fk_Agreement_Patient1`
     FOREIGN KEY (`Patient_idPatient`)
     REFERENCES `mydb`.`Patient` (`idPatient`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Agreement_Research1`
-    FOREIGN KEY (`Research_idResearch`)
-    REFERENCES `mydb`.`Research` (`idResearch`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

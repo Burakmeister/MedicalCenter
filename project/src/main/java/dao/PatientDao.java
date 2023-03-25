@@ -12,6 +12,7 @@ public class PatientDao extends Dao<Patient>{
 		this.setmodelClass(Patient.class);
 	}
 		
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Patient> getPatientsByResearchTitle(String title){
         Session session = this.getSession();
         session.beginTransaction();
