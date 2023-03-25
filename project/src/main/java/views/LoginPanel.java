@@ -23,7 +23,8 @@ import mapped.User;
 public class LoginPanel extends JPanel{
 	
 	private JButton logInButton = new JButton("Zaloguj"),
-			registerButton= new JButton("Rejestracja");
+			registerButton= new JButton("Rejestracja"),
+			exitButton = new JButton("Wyjdz");
 	private JLabel nicknameText = new JLabel("Login:"),
 			passwordText = new JLabel("Hasło:");
 	private JTextField nicknameField = new JTextField(10);
@@ -34,9 +35,13 @@ public class LoginPanel extends JPanel{
 	
 	public LoginPanel() {
 		init();
+		initComposition();
 		this.setBackground(new Color(50, 50, 150));
 		setFocusable(true);
 		requestFocus(); 
+	}
+	
+	private void initComposition() {
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(50,50,50,50);
@@ -69,9 +74,13 @@ public class LoginPanel extends JPanel{
 		gbc.gridy = 3;
 		gbc.gridwidth = 2;
 		add(registerButton, gbc);
-	
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.gridwidth = 2;
+		add(this.exitButton, gbc);
 	}
-	
+
 	private void init() {
 		UserDao uDao = new UserDao();
 		this.passwordField.setEditable(true);
@@ -107,6 +116,13 @@ public class LoginPanel extends JPanel{
 			}
 			this.passwordField.setText("");
 			this.nicknameField.setText("");
+		});
+		
+		exitButton.setFont(font);
+		exitButton.setBackground(Color.black);
+		exitButton.setForeground(Color.WHITE);
+		exitButton.addActionListener((e)->{
+			System.exit(0);
 		});
 		
 		registerButton.setFont(font);

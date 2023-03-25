@@ -1,5 +1,7 @@
 package mapped;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -61,6 +63,23 @@ public class Research {
 	@Override
 	public String toString() {
 		return title;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(title);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Research other = (Research) obj;
+		return Objects.equals(title, other.title);
 	}
 	
 }

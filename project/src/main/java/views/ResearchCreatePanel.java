@@ -7,11 +7,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import dao.ResearchDao;
 import mapped.Research;
@@ -37,7 +41,38 @@ public class ResearchCreatePanel extends JPanel{
 		requestFocus(); 
 		init();
 		initComposition();
-//		initListeners();
+		initListeners();
+	}
+
+	private void initListeners() {
+		this.returnButton.addActionListener((e)->{
+			Main frame = (Main) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(this.prevPanel);
+			frame.revalidate();
+			frame.repaint();
+			if(this.prevPanel instanceof AdministratorPanel) {
+				AdministratorPanel panel = (AdministratorPanel) prevPanel;
+				panel.setProjectsList();
+			}
+		});
+		this.saveButton.addActionListener((e)->{
+			ResearchDao rDao = new ResearchDao();
+			if(!"".equals(titleField.getText())){
+				if(rDao.getAll().contains(new Research(titleField.getText()))) {
+					JOptionPane.showMessageDialog(null, "Istnieje już projekt o podanej nazwie", "", JOptionPane.WARNING_MESSAGE);
+				}else {
+					if(!"".equals(this.descriptionArea.getText())) {
+						rDao.create(new Research(this.titleField.getText(), this.descriptionArea.getText()));
+					}else {
+						rDao.create(new Research(this.titleField.getText()));
+					}
+					JOptionPane.showMessageDialog(null, "Dodano projekt", "", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}else {
+				JOptionPane.showMessageDialog(null, "Projekt musi zawierać nazwę", "", JOptionPane.WARNING_MESSAGE);
+			}
+		});
 	}
 
 	private void initComposition() {

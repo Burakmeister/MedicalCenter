@@ -52,13 +52,10 @@ public class AdministratorPanel extends JPanel{
 	public AdministratorPanel(LoginPanel loginPanel, User user) {
 		this.user = user;
 		this.loginPanel = loginPanel;
-		ResearchDao rDao = new ResearchDao();
-		for(Research res : rDao.getAll()) {
-			this.researches.addElement(res);
-		}
 	    this.researchesJList = new JList<>(this.researches);
 	    this.patientsJList = new JList<>(this.patients);
 	    	    	    
+	    this.setProjectsList();
 		this.setBackground(new Color(50, 50, 150));
 		setFocusable(true);
 		requestFocus(); 
@@ -93,10 +90,7 @@ public class AdministratorPanel extends JPanel{
 				switch(input) {
 				case 0:{
 					rDao.delete(delete);
-					this.researches.removeAllElements();
-					for(Research res : rDao.getAll()) {
-						this.researches.addElement(res);
-					}
+					this.setProjectsList();
 				}
 				case 2:{
 					break;
@@ -254,5 +248,13 @@ public class AdministratorPanel extends JPanel{
 		frame.getContentPane().add(loginPanel);
 		frame.revalidate();
 		frame.repaint();
+	}
+
+	public void setProjectsList() {
+		this.researches.removeAllElements();
+		ResearchDao rDao = new ResearchDao();
+		for(Research res : rDao.getAll()) {
+			this.researches.addElement(res);
+		}		
 	}
 }
