@@ -1,0 +1,40 @@
+package views;
+
+import java.awt.Color;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import dao.ResearchDao;
+import mapped.Research;
+
+public class ResearchCreatePanel extends JPanel{
+	
+	private JPanel prevPanel;
+	
+	private JTextArea descriptionArea = new JTextArea();
+	private JTextField titleField = new JTextField();
+	private JLabel titleText = new JLabel("Tytuł"), 
+			descriptionText = new JLabel("Opis");
+	private JButton returnButton = new JButton("Cofnij"),
+			saveButton = new JButton("Zapisz");
+	
+
+	public ResearchCreatePanel(JPanel panel) {
+		this.prevPanel = panel;
+		this.setBackground(new Color(50, 50, 150));
+		setFocusable(true);
+		requestFocus(); 
+		init();
+		initComposition();
+		initListeners();
+	}
+
+	private void init() {
+	}
+
+}

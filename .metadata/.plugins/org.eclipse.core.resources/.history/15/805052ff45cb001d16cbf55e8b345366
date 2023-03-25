@@ -1,0 +1,13 @@
+package views;
+
+import javax.swing.JPanel;
+
+public class ResearchCreatePanel extends JPanel{
+	
+	private JPanel prevPanel;
+
+	public ResearchCreatePanel(JPanel panel) {
+		this.prevPanel = panel;
+	}
+
+}
