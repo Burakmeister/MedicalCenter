@@ -1,0 +1,10 @@
+package mapped;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="research_has_patient")
+public class Agreement {
+
+}

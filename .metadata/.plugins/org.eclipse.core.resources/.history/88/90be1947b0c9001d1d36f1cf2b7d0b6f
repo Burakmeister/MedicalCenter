@@ -1,0 +1,23 @@
+package views;
+
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class LoginPanel extends JPanel{
+	
+	JButton logInButton = new JButton("Zaloguj");
+	JLabel nicknameText = new JLabel("Login:"),
+			passwordText = new JLabel("Hasło:");
+	JTextField nicknameField = new JTextField(), 
+	passwordField= new JTextField();
+	
+	public LoginPanel() {
+		setLayout(new GridBagLayout(5, 4, 20, 20));
+		add(logInButton, );
+	}
+}

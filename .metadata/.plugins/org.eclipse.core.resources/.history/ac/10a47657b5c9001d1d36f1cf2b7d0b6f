@@ -1,0 +1,36 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JFrame;
+
+import views.LoginPanel;
+
+public class Main extends JFrame implements KeyListener{
+	public Main() {
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		setUndecorated(true);
+		this.setContentPane(new LoginPanel());
+		setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new Main();
+	}
+
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			System.exit(0);
+		}
+	}
+
+	public void keyReleased(KeyEvent e) {
+
+	}
+}
+

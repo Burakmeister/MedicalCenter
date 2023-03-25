@@ -1,0 +1,58 @@
+package views;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class LoginPanel extends JPanel{
+	
+	JButton logInButton = new JButton("Zaloguj");
+	JLabel nicknameText = new JLabel("Login:"),
+			passwordText = new JLabel("Hasło:");
+	JTextField nicknameField = new JTextField(), 
+	passwordField= new JTextField();
+	
+	public LoginPanel() {
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(50,50,50,50);
+		setLayout(layout);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		add(nicknameText, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		add(passwordText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		add(nicknameField, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		add(passwordField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.gridwidth = 2;
+		add(logInButton, gbc);
+		
+		logInButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+	}
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="jakarta.persistence.OneToOne"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="com.mysql.cj.xdevapi.SessionFactory"/>
+    <fullyQualifiedTypeName name="org.hibernate.SessionFactory"/>
+    <fullyQualifiedTypeName name="org.hibernate.HibernateException"/>
+    <fullyQualifiedTypeName name="jakarta.transaction.Transaction"/>
+    <fullyQualifiedTypeName name="org.hibernate.resource.transaction.spi.TransactionStatus"/>
+    <fullyQualifiedTypeName name="mapped.Patient"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="org.hibernate.Session"/>
+    <fullyQualifiedTypeName name="mapped.Research"/>
+    <fullyQualifiedTypeName name="mapped.Result"/>
+    <fullyQualifiedTypeName name="mapped.Test"/>
+    <fullyQualifiedTypeName name="javax.swing.JFrame"/>
+    <fullyQualifiedTypeName name="java.awt.event.KeyListener"/>
+    <fullyQualifiedTypeName name="javax.swing.JPanel"/>
+    <fullyQualifiedTypeName name="java.awt.GridLayout"/>
+    <fullyQualifiedTypeName name="javax.swing.JButton"/>
+    <fullyQualifiedTypeName name="javax.swing.JTextField"/>
+    <fullyQualifiedTypeName name="javax.swing.JLabel"/>
+    <fullyQualifiedTypeName name="java.awt.GridBagLayout"/>
+    <fullyQualifiedTypeName name="java.awt.GridBagConstraints"/>
+    <fullyQualifiedTypeName name="views.LoginPanel"/>
+    <fullyQualifiedTypeName name="java.awt.Insets"/>
+    <fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+    <fullyQualifiedTypeName name="dao.UserDao"/>
+    <fullyQualifiedTypeName name="mapped.User"/>
+    <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="java.awt.Color"/>
+</qualifiedTypeNameHistroy>

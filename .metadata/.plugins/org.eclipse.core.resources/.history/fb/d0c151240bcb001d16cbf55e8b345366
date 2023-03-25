@@ -1,0 +1,261 @@
+package views;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import dao.UserDao;
+import mapped.User;
+
+public class RegisterPanel extends JPanel{
+	
+	private JButton registerButton = new JButton("Zarejestruj"),
+			logInButton= new JButton("Logowanie");
+	private JLabel nicknameText = new JLabel("Login:"),
+			passwordText = new JLabel("Hasło:"),
+			firstnameText = new JLabel("Imię:"),
+			surnameText = new JLabel("Nazwisko:"),
+			phoneNumberText = new JLabel("Numer telefonu:"),
+			emailText = new JLabel("E-mail:");
+	private JTextField nicknameField = new JTextField(10), 
+	passwordField = new JTextField(10),
+	firstnameField = new JTextField(10),
+	surnameField = new JTextField(10),
+	phoneNumberField = new JTextField(10),
+	emailField = new JTextField(10);
+	private JCheckBox patientCheckbox = new JCheckBox("pacjent");
+	
+	private Font font = new Font("TimesRoman", Font.BOLD, 50);
+	
+	private LoginPanel loginPanel;
+	
+	public RegisterPanel(LoginPanel loginPanel) {
+		this.loginPanel = loginPanel;
+		initComposition();
+		init();
+	}
+	
+	private void init() {
+		UserDao uDao = new UserDao();
+		
+		registerButton.setFont(font);
+		registerButton.setBackground(Color.black);
+		registerButton.setForeground(Color.WHITE);
+		registerButton.addActionListener((e)->{
+		if(this.nicknameField.getText()!="" && this.passwordField.getText()!="") {
+			
+			List<User> users = uDao.getAll();
+			User temp = new User();
+			temp.setLogin(nicknameField.getText());
+			if(users.contains(temp)) {
+				JOptionPane.showMessageDialog(null, "Ten login jest zajęty", "", JOptionPane.WARNING_MESSAGE);
+			}else {
+				if(!this.patientCheckbox.isSelected()) {
+					List<User> users = uDao.getAll();
+					User temp = new User();
+					temp.setLogin(nicknameField.getText());
+					if(users.contains(temp)) {
+						JOptionPane.showMessageDialog(null, "Ten login jest zajęty", "", JOptionPane.WARNING_MESSAGE);
+					}else {
+						uDao.create( new User(this.nicknameField.getText(), this.passwordField.getText(), (byte)0) );
+						JOptionPane.showMessageDialog(null, "Konto utworzone", "", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}else {
+					List<User> users = uDao.getAll();
+					User temp = new User();
+					temp.setLogin(nicknameField.getText());
+					if(users.contains(temp)) {
+						JOptionPane.showMessageDialog(null, "Ten login jest zajęty", "", JOptionPane.WARNING_MESSAGE);
+					}else {
+						uDao.create( new User(this.nicknameField.getText(), this.passwordField.getText(), (byte)0) );
+						JOptionPane.showMessageDialog(null, "Konto utworzone", "", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			}
+		}
+			
+		});
+		
+		logInButton.setFont(font);
+		logInButton.setBackground(Color.black);
+		logInButton.setForeground(Color.WHITE);
+		logInButton.addActionListener((e)->{
+			Main frame = (Main) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (Component) e.getSource());
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(loginPanel);
+			frame.revalidate();
+			frame.repaint();
+		});
+		
+		this.patientCheckbox.addChangeListener((e)->{
+			if(patientCheckbox.isSelected()) {
+				this.firstnameField.setEditable(true);
+				this.firstnameField.setBackground(Color.white);
+				
+				this.surnameField.setEditable(true);
+				this.surnameField.setBackground(Color.white);
+				
+				this.phoneNumberField.setEditable(true);
+				this.phoneNumberField.setBackground(Color.white);
+				
+				this.emailField.setEditable(true);
+				this.emailField.setBackground(Color.white);
+			}else {
+				this.firstnameField.setEditable(false);
+				this.firstnameField.setBackground(Color.gray);
+				this.firstnameField.setText("");
+				
+				this.surnameField.setEditable(false);
+				this.surnameField.setBackground(Color.gray);
+				this.surnameField.setText("");
+				
+				this.phoneNumberField.setEditable(false);
+				this.phoneNumberField.setBackground(Color.gray);
+				this.phoneNumberField.setText("");
+				
+				this.emailField.setEditable(false);
+				this.emailField.setBackground(Color.gray);
+				this.emailField.setText("");
+			}
+		});
+	}
+	
+	private void initComposition() {
+		this.setBackground(new Color(50, 50, 150));
+		setFocusable(true);
+		requestFocus(); 
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(layout);
+		
+		this.passwordField.setFont(font);
+		this.nicknameField.setFont(font);
+		
+		this.passwordText.setFont(font);
+		this.passwordText.setForeground(Color.black);
+		this.nicknameText.setFont(font);
+		this.nicknameText.setForeground(Color.black);
+		
+		gbc.insets = new Insets(50,50,50,50);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		add(nicknameText, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		add(passwordText, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		add(nicknameField, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		add(passwordField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.gridwidth = 2;
+		add(registerButton, gbc);
+		
+		
+		gbc.insets = new Insets(0,50,50,50);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.gridwidth = 2;
+		add(logInButton, gbc);
+		
+		this.initPersonalData(gbc);
+	}
+	
+	private void initPersonalData(GridBagConstraints gbc) {
+		this.patientCheckbox.setFont(font);
+		this.patientCheckbox.setForeground(Color.WHITE);
+		this.patientCheckbox.setBackground(new Color(50, 50, 150));
+		
+		this.firstnameField.setFont(font);
+		this.firstnameField.setEditable(false);
+		this.firstnameField.setBackground(Color.gray);
+		
+		this.surnameField.setFont(font);
+		this.surnameField.setEditable(false);
+		this.surnameField.setBackground(Color.gray);
+		
+		this.phoneNumberField.setFont(font);
+		this.phoneNumberField.setEditable(false);
+		this.phoneNumberField.setBackground(Color.gray);
+		
+		this.emailField.setFont(font);
+		this.emailField.setEditable(false);
+		this.emailField.setBackground(Color.gray);
+		
+		this.firstnameText.setFont(font);
+		this.firstnameText.setForeground(Color.black);
+		this.surnameText.setFont(font);
+		this.surnameText.setForeground(Color.black);
+		this.phoneNumberText.setFont(font);
+		this.phoneNumberText.setForeground(Color.black);
+		this.emailText.setFont(font);
+		this.emailText.setForeground(Color.black);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.gridwidth = 2;
+		add(patientCheckbox, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		gbc.gridwidth = 1;
+		add(this.firstnameText, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 2;
+		gbc.gridwidth = 1;
+		add(this.surnameText, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 3;
+		gbc.gridwidth = 1;
+		add(this.phoneNumberText, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 4;
+		gbc.gridwidth = 1;
+		add(this.emailText, gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		gbc.gridwidth = 1;
+		add(this.firstnameField, gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 2;
+		gbc.gridwidth = 1;
+		add(this.surnameField, gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 3;
+		gbc.gridwidth = 1;
+		add(this.phoneNumberField, gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 4;
+		gbc.gridwidth = 1;
+		add(this.emailField, gbc);
+	}
+}

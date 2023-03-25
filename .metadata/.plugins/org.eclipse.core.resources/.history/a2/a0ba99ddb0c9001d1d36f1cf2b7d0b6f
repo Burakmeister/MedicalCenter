@@ -1,0 +1,29 @@
+package views;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class LoginPanel extends JPanel{
+	
+	JButton logInButton = new JButton("Zaloguj");
+	JLabel nicknameText = new JLabel("Login:"),
+			passwordText = new JLabel("Hasło:");
+	JTextField nicknameField = new JTextField(), 
+	passwordField= new JTextField();
+	
+	public LoginPanel() {
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints gbc = newGridBagConstraints();
+		setLayout(layout);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		add(logInButton, );
+	}
+}

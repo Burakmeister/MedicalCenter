@@ -1,0 +1,28 @@
+package dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+
+import mapped.Agreement;
+
+public class AgreementDao extends Dao<Agreement>{
+	public AgreementDao() {
+		this.setmodelClass(Agreement.class);
+	}
+	
+	public List<Agreement> getAllAgreements(){
+        Session session = this.getSession();
+        session.beginTransaction();
+        List<Agreement> list = session.createQuery(
+        		"SELECT agreement"
+        		+ "FROM mapped.Agreement agreement")
+                .getResultList();
+        session.getTransaction().commit();
+        session.close();
+        if (list != null) {
+            return list;
+        }
+        return null;
+	}
+}

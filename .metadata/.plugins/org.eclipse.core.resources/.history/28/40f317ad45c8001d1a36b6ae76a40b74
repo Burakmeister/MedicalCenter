@@ -1,0 +1,11 @@
+package mapped;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Test")
+public class Test {
+	
+	private int idTest;
+}

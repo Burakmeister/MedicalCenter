@@ -1,0 +1,11 @@
+package views;
+
+import java.awt.GridLayout;
+
+import javax.swing.JPanel;
+
+public class LoginPanel extends JPanel{
+	public LoginPanel() {
+		setLayout(new GridLayout(5, 3));
+	}
+}

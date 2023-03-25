@@ -1,0 +1,64 @@
+package mapped;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="patient")
+public class Patient {
+	private int idPatient;
+	private String firstname;
+	private String lastname;
+	private int phoneNumber;
+	private String email;
+	private User user;
+	
+	public Patient(int idPatient, String firstname, String lastname, 
+			int phoneNumber, String email, User user) {
+		super();
+		this.idPatient = idPatient;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.user = user;
+	}
+	
+	public int getIdPatient() {
+		return idPatient;
+	}
+	public String getLastname() {
+		return lastname;
+	}
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+	public int getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(int phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public void setIdPatient(int idPatient) {
+		this.idPatient = idPatient;
+	}
+	public String getFirstname() {
+		return firstname;
+	}
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+}

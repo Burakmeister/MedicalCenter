@@ -1,0 +1,13 @@
+package mapped;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Agreement")
+public class Agreement {
+	private int idAgreement;
+	private String agreementSource;
+	private Research research;
+	private Patient patient;
+}

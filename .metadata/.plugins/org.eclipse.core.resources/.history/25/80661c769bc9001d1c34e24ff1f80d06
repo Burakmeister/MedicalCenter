@@ -1,0 +1,9 @@
+package dao;
+
+import mapped.Patient;
+
+public class PatientDao extends Dao<Patient>{
+	public PatientDao() {
+		this.setmodelClass(Patient.class);
+	}
+}

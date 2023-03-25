@@ -1,0 +1,7 @@
+package mapped;
+
+@Entity
+@Table()
+public class Test {
+
+}

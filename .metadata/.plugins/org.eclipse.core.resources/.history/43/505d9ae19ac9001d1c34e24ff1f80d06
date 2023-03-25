@@ -1,0 +1,7 @@
+package dao;
+
+import mapped.Patient;
+
+public class PatientDao extends Dao<Patient>{
+
+}

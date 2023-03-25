@@ -1,0 +1,7 @@
+package mapped;
+
+@Entity
+@Table(name="patient")
+public class Patient {
+
+}

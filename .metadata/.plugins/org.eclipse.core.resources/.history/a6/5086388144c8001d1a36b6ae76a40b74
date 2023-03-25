@@ -1,0 +1,27 @@
+package mapped;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="patient")
+public class Patient {
+	private int idPatient;
+	private String firstname;
+	private String lastname;
+	private int phoneNumber;
+	private String email;
+	private User user;
+	public int getIdPatient() {
+		return idPatient;
+	}
+	public void setIdPatient(int idPatient) {
+		this.idPatient = idPatient;
+	}
+	public String getFirstname() {
+		return firstname;
+	}
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+}
